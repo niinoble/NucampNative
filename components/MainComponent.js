@@ -9,8 +9,18 @@ import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-nativ
 import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation';
 import { Icon } from 'react-native-elements'
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import {
+    fetchCampsites, fetchComments, fetchPromotions,
+    fetchPartners
+} from '../redux/ActionCreators';
 
-
+const mapDispatchToProps = {
+    fetchCampsites,
+    fetchComments,
+    fetchPromotions,
+    fetchPartners
+};
 const DirectoryNavigator = createStackNavigator(
     {
         Directory: {
@@ -113,14 +123,14 @@ const ContactNavigator = createStackNavigator(
 );
 const CustomDrawerContentComponent = props => (
     <ScrollView>
-        <SafeAreaView 
+        <SafeAreaView
             style={styles.container}
-            forceInset={{top: 'always', horizontal: 'never'}}>
+            forceInset={{ top: 'always', horizontal: 'never' }}>
             <View style={styles.drawerHeader}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                     <Image source={require('./images/logo.png')} style={styles.drawerImage} />
                 </View>
-                <View style={{flex: 2}}>
+                <View style={{ flex: 2 }}>
                     <Text style={styles.drawerHeaderText}>NuCamp</Text>
                 </View>
             </View>
@@ -134,7 +144,7 @@ const MainNavigator = createDrawerNavigator(
         Home: {
             screen: HomeNavigator,
             navigationOptions: {
-                drawerIcon: ({tintColor}) => (
+                drawerIcon: ({ tintColor }) => (
                     <Icon
                         name='home'
                         type='font-awesome'
@@ -147,7 +157,7 @@ const MainNavigator = createDrawerNavigator(
         Directory: {
             screen: DirectoryNavigator,
             navigationOptions: {
-                drawerIcon: ({tintColor}) => (
+                drawerIcon: ({ tintColor }) => (
                     <Icon
                         name='list'
                         type='font-awesome'
@@ -161,7 +171,7 @@ const MainNavigator = createDrawerNavigator(
             screen: AboutNavigator,
             navigationOptions: {
                 drawerLabel: 'About Us',
-                drawerIcon: ({tintColor}) => (
+                drawerIcon: ({ tintColor }) => (
                     <Icon
                         name='info-circle'
                         type='font-awesome'
@@ -175,7 +185,7 @@ const MainNavigator = createDrawerNavigator(
             screen: ContactNavigator,
             navigationOptions: {
                 drawerLabel: 'Contact Us',
-                drawerIcon: ({tintColor}) => (
+                drawerIcon: ({ tintColor }) => (
                     <Icon
                         name='address-card'
                         type='font-awesome'
@@ -193,6 +203,15 @@ const MainNavigator = createDrawerNavigator(
 );
 
 class Main extends Component {
+
+    componentDidMount() {
+        this.props.fetchCampsites();
+        this.props.fetchComments();
+        this.props.fetchPromotions();
+        this.props.fetchPartners();
+    }
+
+
     render() {
         return (
             <View style={{
@@ -235,4 +254,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);
