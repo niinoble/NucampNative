@@ -1,3 +1,4 @@
+<script src="http://10.119.0.178:8097"></script>
 import React from 'react';
 import Main from './components/MainComponent';
 import { Provider } from 'react-redux';
