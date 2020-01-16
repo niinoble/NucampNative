@@ -141,6 +141,7 @@ class CampsiteInfo extends Component {
         
         return(
             <ScrollView>
+                
                 <RenderCampsite campsite={campsite}
                  onShowModal={() => this.toggleModal()}
                     favorite={this.props.favorites.includes(campsiteId)}
