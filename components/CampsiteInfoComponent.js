@@ -26,14 +26,16 @@ const mapDispatchToProps = {
 function RenderCampsite(props) {
     const { campsite } = props;
 
-    handleViewRef = ref => this.view = ref;
+    let view = React.createRef();
+
+    const recongnizeComment = ({ dx }) => (dx > 200) ? true : false;
 
     const recognizeDrag = ({ dx }) => (dx < -200) ? true : false;
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {
-            this.view.rubberBand(1000)
+            view.current.rubberBand(1000)
                 .then(endState => console.log(endState.finished ? 'finished' : 'canceled'));
         },
         onPanResponderEnd: (e, gestureState) => {
@@ -58,6 +60,10 @@ function RenderCampsite(props) {
                     { cancelable: false }
                 );
             }
+            else if (recongnizeComment(gestureState)){
+                props.onShowModal();
+
+            }
             return true;
         }
     });
@@ -68,7 +74,7 @@ function RenderCampsite(props) {
                 animation='fadeInDown'
                 duration={2000}
                 delay={1000}
-                ref={this.handleViewRef}
+                ref={view}
                 {...panResponder.panHandlers}>
                 <Card
                     featuredTitle={campsite.name}
@@ -112,6 +118,9 @@ function RenderCampsite(props) {
 }
 
 function RenderComments({ comments }) {
+
+
+    const recognizeDrag = ({ dx }) => (dx > 200) ? true : false;
 
     const renderCommentItem = ({ item }) => {
         return (
